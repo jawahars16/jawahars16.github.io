@@ -1,0 +1,124 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  slug: string;
+  heroImage?: string;
+}
+
+const { title, description, date, tags, slug, heroImage } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'short', day: 'numeric',
+});
+
+// Gradient palette keyed by tag — used for hero placeholder
+const TAG_CONFIG: Record<string, { gradient: [string, string]; tagBg: string; tagText: string }> = {
+  'Go':                   { gradient: ['#38bdf8', '#6366f1'], tagBg: '#e0f2fe', tagText: '#0369a1' },
+  'OOP':                  { gradient: ['#818cf8', '#6366f1'], tagBg: '#e0e7ff', tagText: '#4338ca' },
+  'Rust':                 { gradient: ['#fb923c', '#ef4444'], tagBg: '#ffedd5', tagText: '#c2410c' },
+  'Systems':              { gradient: ['#94a3b8', '#64748b'], tagBg: '#f1f5f9', tagText: '#475569' },
+  'AWS':                  { gradient: ['#fbbf24', '#f97316'], tagBg: '#fef3c7', tagText: '#b45309' },
+  'Databases':            { gradient: ['#fb923c', '#f97316'], tagBg: '#ffedd5', tagText: '#c2410c' },
+  'GCP':                  { gradient: ['#4ade80', '#06b6d4'], tagBg: '#dcfce7', tagText: '#15803d' },
+  'Azure':                { gradient: ['#38bdf8', '#6366f1'], tagBg: '#e0f2fe', tagText: '#0284c7' },
+  'Cloud':                { gradient: ['#67e8f9', '#818cf8'], tagBg: '#cffafe', tagText: '#0e7490' },
+  'Architecture':         { gradient: ['#a78bfa', '#ec4899'], tagBg: '#ede9fe', tagText: '#7c3aed' },
+  'Distributed Systems':  { gradient: ['#c084fc', '#818cf8'], tagBg: '#f3e8ff', tagText: '#7e22ce' },
+  'Resilience':           { gradient: ['#34d399', '#06b6d4'], tagBg: '#d1fae5', tagText: '#065f46' },
+  'NGINX':                { gradient: ['#2dd4bf', '#4ade80'], tagBg: '#ccfbf1', tagText: '#0f766e' },
+  'Networking':           { gradient: ['#22d3ee', '#38bdf8'], tagBg: '#cffafe', tagText: '#0e7490' },
+  'Web':                  { gradient: ['#f472b6', '#a78bfa'], tagBg: '#fce7f3', tagText: '#be185d' },
+  'React':                { gradient: ['#38bdf8', '#06b6d4'], tagBg: '#e0f2fe', tagText: '#0369a1' },
+  'Flutter':              { gradient: ['#38bdf8', '#6366f1'], tagBg: '#e0f2fe', tagText: '#0284c7' },
+  'Security':             { gradient: ['#f87171', '#fb923c'], tagBg: '#fee2e2', tagText: '#b91c1c' },
+  'Vault':                { gradient: ['#fbbf24', '#34d399'], tagBg: '#fef3c7', tagText: '#92400e' },
+  'JavaScript':           { gradient: ['#fde047', '#fb923c'], tagBg: '#fef9c3', tagText: '#a16207' },
+  'Programming':          { gradient: ['#c084fc', '#f472b6'], tagBg: '#f3e8ff', tagText: '#7e22ce' },
+};
+
+const DEFAULT_GRADIENT: [string, string] = ['#818cf8', '#c084fc'];
+
+function getGradient(tags: string[]): [string, string] {
+  for (const tag of tags) {
+    if (TAG_CONFIG[tag]) return TAG_CONFIG[tag].gradient;
+  }
+  return DEFAULT_GRADIENT;
+}
+
+function getTagStyle(tag: string): { bg: string; text: string } {
+  const cfg = TAG_CONFIG[tag];
+  return cfg ? { bg: cfg.tagBg, text: cfg.tagText } : { bg: '#f4f4f5', text: '#52525b' };
+}
+
+const [from, to] = getGradient(tags);
+const primaryTag = tags[0] ?? '';
+---
+
+<a href={`/articles/${slug}/`} class="group block rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-200 shadow-lg" style="background: #21222c; border: 1px solid #44475a;">
+  <!-- Hero: real image or gradient placeholder -->
+  <div class="h-36 w-full relative overflow-hidden">
+    {heroImage ? (
+      <>
+        <img
+          src={heroImage}
+          alt={title}
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
+        <!-- dark scrim so tag label stays readable on photos -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+      </>
+    ) : (
+      <>
+        <div
+          class="absolute inset-0"
+          style={`background: linear-gradient(135deg, ${from}, ${to})`}
+        />
+        <div class="absolute inset-0 opacity-10" style="background-image: url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\");" />
+      </>
+    )}
+    {primaryTag && (
+      <span class="absolute bottom-3 left-3 z-10 text-xs font-mono font-medium text-white/90 bg-black/25 px-2 py-1 rounded-md backdrop-blur-sm">
+        {primaryTag}
+      </span>
+    )}
+  </div>
+
+  <!-- Card body -->
+  <div class="p-5">
+    <time
+      datetime={date.toISOString().split('T')[0]}
+      class="text-xs font-mono"
+      style="color: #44475a;"
+    >
+      {formattedDate}
+    </time>
+
+    <h2 class="mt-2 text-base font-semibold leading-snug line-clamp-2 transition-colors" style="color: #f8f8f2;" >
+      {title}
+    </h2>
+
+    <p class="mt-2 text-sm leading-relaxed line-clamp-2" style="color: #6272a4;">
+      {description}
+    </p>
+
+    {tags.length > 0 && (
+      <div class="mt-3 flex gap-1.5 flex-wrap">
+        {tags.map(tag => {
+          const style = getTagStyle(tag);
+          return (
+            <span
+              class="text-xs font-mono px-2 py-0.5 rounded-full font-medium"
+              style={`background: ${style.bg}; color: ${style.text}`}
+            >
+              {tag}
+            </span>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</a>

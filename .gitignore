@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Assets saved outside public/ (hero images working directory)
+assets/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# OS & editor
+.DS_Store
+.claire/
+.claude/
+
+# Logs
+*.log

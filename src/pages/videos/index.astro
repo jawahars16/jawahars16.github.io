@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const CHANNEL_ID = 'UCmMu15DUGT3klr0M6RBQqbg';
+const CHANNEL_URL = 'https://www.youtube.com/channel/UCmMu15DUGT3klr0M6RBQqbg/videos';
+const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+
+interface Video {
+  id: string;
+  title: string;
+  description: string;
+  published: string;
+  formattedDate: string;
+  thumbnail: string;
+  url: string;
+}
+
+function decodeEntities(str: string): string {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
+let videos: Video[] = [];
+let fetchError = false;
+
+try {
+  const res = await fetch(RSS_URL);
+  const xml = await res.text();
+
+  const entries = xml.match(/<entry>([\s\S]*?)<\/entry>/g) ?? [];
+
+  // Check if a video ID is a Short by following YouTube's /shorts/ redirect.
+  // Real Shorts stay on /shorts/; regular videos get redirected to /watch?v=.
+  const checkIsShort = async (id: string): Promise<boolean> => {
+    try {
+      const r = await fetch(`https://www.youtube.com/shorts/${id}`, { redirect: 'follow' });
+      return r.url.includes('/shorts/');
+    } catch {
+      return false; // on error, keep the video
+    }
+  };
+
+  const parsed = entries.map((entry) => {
+    const id      = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/)?.[1] ?? '';
+    const title   = decodeEntities(entry.match(/<title>([\s\S]*?)<\/title>/)?.[1]?.trim() ?? '');
+    const pub     = entry.match(/<published>(.*?)<\/published>/)?.[1] ?? '';
+    const desc    = decodeEntities(
+      (entry.match(/<media:description>([\s\S]*?)<\/media:description>/)?.[1] ?? '').trim()
+    ).slice(0, 140);
+
+    const date = new Date(pub);
+    const formattedDate = isNaN(date.getTime())
+      ? pub.slice(0, 10)
+      : date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+    return {
+      id,
+      title,
+      description: desc,
+      published: pub.slice(0, 10),
+      formattedDate,
+      thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+      url: `https://www.youtube.com/watch?v=${id}`,
+    };
+  }).filter(v => v.id);
+
+  // Run all short-checks in parallel so build stays fast
+  const shortFlags = await Promise.all(parsed.map(v => checkIsShort(v.id)));
+  videos = parsed.filter((_, i) => !shortFlags[i]);
+
+} catch (e) {
+  fetchError = true;
+}
+---
+
+<BaseLayout
+  title="Videos — jawahar.dev"
+  description="Engineering explainer videos on distributed systems, cloud, Go, and more."
+  canonical="https://jawahar.dev/videos/"
+>
+  <div class="max-w-5xl mx-auto px-6 py-16">
+
+    <!-- Page header -->
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight mb-2" style="color: #f8f8f2;">Videos</h1>
+        <p class="text-sm font-mono" style="color: #6272a4;">
+          Latest from my
+          <a href={CHANNEL_URL} target="_blank" rel="noopener"
+            class="underline underline-offset-2 transition-colors" style="color: #8be9fd;">
+            YouTube channel
+          </a>
+        </p>
+      </div>
+    </div>
+
+    {fetchError ? (
+      <!-- Fallback if RSS is unreachable at build time -->
+      <div class="py-20 text-center">
+        <p class="text-sm font-mono mb-4" style="color: #6272a4;">Could not load videos at build time.</p>
+        <a href={CHANNEL_URL} target="_blank" rel="noopener"
+          class="text-sm font-mono transition-colors" style="color: #8be9fd;">
+          Watch on YouTube →
+        </a>
+      </div>
+    ) : (
+      <>
+        <!-- Video grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+          {videos.map(video => (
+            <a
+              href={video.url}
+              target="_blank"
+              rel="noopener"
+              class="group block rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-200 shadow-lg"
+              style="background: #21222c; border: 1px solid #44475a;"
+            >
+              <!-- Thumbnail with play button overlay -->
+              <div class="relative overflow-hidden" style="aspect-ratio: 16/9;">
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+                <!-- Dark scrim -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <!-- Play button -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div
+                    class="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 group-hover:scale-110"
+                    style="background: rgba(255,0,0,0.85); box-shadow: 0 4px 20px rgba(255,0,0,0.4);"
+                  >
+                    <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card body -->
+              <div class="p-4">
+                <time datetime={video.published} class="text-xs font-mono" style="color: #44475a;">
+                  {video.formattedDate}
+                </time>
+                <h2 class="mt-2 text-sm font-semibold leading-snug line-clamp-2" style="color: #f8f8f2;">
+                  {video.title}
+                </h2>
+                {video.description && (
+                  <p class="mt-1.5 text-xs leading-relaxed line-clamp-2" style="color: #6272a4;">
+                    {video.description}
+                  </p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <!-- Channel link -->
+        <div class="mt-12 text-center">
+          <a
+            href={CHANNEL_URL}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 text-sm font-mono px-5 py-2.5 rounded-lg transition-all duration-200"
+            style="color: #f8f8f2; background: #FF0000; box-shadow: 0 4px 16px rgba(255,0,0,0.3);"
+            onmouseover="this.style.boxShadow='0 4px 24px rgba(255,0,0,0.5)'"
+            onmouseout="this.style.boxShadow='0 4px 16px rgba(255,0,0,0.3)'"
+          >
+            <!-- YouTube icon -->
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            Watch all videos on YouTube
+          </a>
+        </div>
+      </>
+    )}
+
+  </div>
+</BaseLayout>

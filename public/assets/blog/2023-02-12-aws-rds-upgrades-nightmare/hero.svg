@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d0f1a"/>
+      <stop offset="100%" stop-color="#1c0a06"/>
+    </linearGradient>
+    <linearGradient id="fire" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#CC3300"/>
+      <stop offset="45%" stop-color="#FF9900"/>
+      <stop offset="100%" stop-color="#FFE44D"/>
+    </linearGradient>
+    <linearGradient id="dbbody" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#CC7700"/>
+      <stop offset="100%" stop-color="#FF9900"/>
+    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="14" cy="14" r="1.2" fill="rgba(255,153,0,0.07)"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="420" fill="url(#bg)"/>
+  <rect width="800" height="420" fill="url(#dots)"/>
+  <!-- Comic border -->
+  <rect x="5" y="5" width="790" height="410" rx="10" fill="none" stroke="#FF9900" stroke-width="2.5" opacity="0.55"/>
+
+  <!-- ============ DATABASE CYLINDER ============ -->
+  <rect x="320" y="118" width="150" height="155" rx="3" fill="url(#dbbody)" stroke="#111" stroke-width="3"/>
+  <ellipse cx="395" cy="118" rx="75" ry="22" fill="#FFB733" stroke="#111" stroke-width="3"/>
+  <ellipse cx="395" cy="273" rx="75" ry="22" fill="#BB6600" stroke="#111" stroke-width="3"/>
+  <!-- Data layer stripes -->
+  <line x1="320" y1="155" x2="470" y2="155" stroke="#CC7700" stroke-width="1.8" opacity="0.6"/>
+  <line x1="320" y1="192" x2="470" y2="192" stroke="#CC7700" stroke-width="1.8" opacity="0.6"/>
+  <line x1="320" y1="229" x2="470" y2="229" stroke="#CC7700" stroke-width="1.8" opacity="0.6"/>
+  <!-- RDS label -->
+  <text x="395" y="168" font-family="'Courier New',monospace" font-size="15" fill="rgba(0,0,0,0.45)" text-anchor="middle" font-weight="bold">RDS</text>
+  <text x="395" y="186" font-family="'Courier New',monospace" font-size="9" fill="rgba(0,0,0,0.35)" text-anchor="middle">v12.4 → v15.0</text>
+
+  <!-- Fire on top of DB -->
+  <path d="M342,116 Q332,76 354,55 Q344,90 374,70 Q360,103 396,76 Q381,110 418,83 Q405,114 442,93 Q430,118 462,108 Q455,116 472,116 Q455,62 443,40 Q430,76 416,50 Q409,85 393,58 Q384,92 366,65 Q357,98 342,116Z" fill="url(#fire)" stroke="#AA2200" stroke-width="1.5"/>
+  <path d="M364,114 Q356,86 370,74 Q362,99 384,89 Q373,108 364,114Z" fill="#FFE44D" opacity="0.85"/>
+  <path d="M408,110 Q400,83 414,71 Q406,97 428,86 Q417,106 408,110Z" fill="#FFE44D" opacity="0.85"/>
+
+  <!-- ============ DEVELOPER (left) ============ -->
+  <!-- Head -->
+  <circle cx="164" cy="152" r="38" fill="#F5C07A" stroke="#111" stroke-width="3"/>
+  <!-- Spiky panic hair -->
+  <path d="M128,140 L132,108 L145,132 L154,104 L165,128 L176,100 L187,128 L196,106 L202,134 L204,140" fill="#3D2B1F" stroke="#111" stroke-width="2.2" fill-rule="nonzero"/>
+  <!-- Eyebrows (raised in horror) -->
+  <path d="M144,135 Q153,126 162,135" fill="none" stroke="#3D2B1F" stroke-width="3" stroke-linecap="round"/>
+  <path d="M168,135 Q177,126 186,135" fill="none" stroke="#3D2B1F" stroke-width="3" stroke-linecap="round"/>
+  <!-- Wide panic eyes -->
+  <ellipse cx="154" cy="148" rx="10" ry="13" fill="white" stroke="#111" stroke-width="2"/>
+  <ellipse cx="177" cy="148" rx="10" ry="13" fill="white" stroke="#111" stroke-width="2"/>
+  <circle cx="156" cy="151" r="5" fill="#222"/>
+  <circle cx="179" cy="151" r="5" fill="#222"/>
+  <circle cx="158" cy="146" r="2.5" fill="white"/>
+  <circle cx="181" cy="146" r="2.5" fill="white"/>
+  <!-- Open mouth horror O -->
+  <ellipse cx="165" cy="173" rx="13" ry="9" fill="#1a0800" stroke="#111" stroke-width="2"/>
+  <path d="M152,173 Q165,181 178,173" fill="#BB3333"/>
+  <!-- Sweat drops -->
+  <ellipse cx="204" cy="136" rx="5" ry="7.5" fill="#88CCFF" stroke="#446699" stroke-width="1.5" transform="rotate(-15,204,136)"/>
+  <ellipse cx="124" cy="148" rx="4" ry="6" fill="#88CCFF" stroke="#446699" stroke-width="1.5" transform="rotate(18,124,148)"/>
+  <!-- Body -->
+  <path d="M130,198 Q124,192 104,206 L114,255 L216,255 L226,206 Q206,192 200,198 Q193,207 165,207 Q137,207 130,198Z" fill="#3A6EC5" stroke="#111" stroke-width="3"/>
+  <!-- Arms raised (panic) -->
+  <line x1="130" y1="210" x2="86" y2="162" stroke="#F5C07A" stroke-width="13" stroke-linecap="round"/>
+  <line x1="200" y1="210" x2="244" y2="162" stroke="#F5C07A" stroke-width="13" stroke-linecap="round"/>
+  <circle cx="84" cy="160" r="13" fill="#F5C07A" stroke="#111" stroke-width="2"/>
+  <circle cx="246" cy="160" r="13" fill="#F5C07A" stroke="#111" stroke-width="2"/>
+  <!-- Legs -->
+  <rect x="137" y="253" width="22" height="58" rx="8" fill="#1a1a2e" stroke="#111" stroke-width="2"/>
+  <rect x="181" y="253" width="22" height="58" rx="8" fill="#1a1a2e" stroke="#111" stroke-width="2"/>
+
+  <!-- Laptop -->
+  <rect x="118" y="294" width="114" height="64" rx="6" fill="#252535" stroke="#111" stroke-width="2.5"/>
+  <rect x="124" y="300" width="102" height="50" rx="3" fill="#0a0d12" stroke="#FF4400" stroke-width="1.5"/>
+  <text x="129" y="318" font-family="'Courier New',monospace" font-size="7.5" fill="#FF4444">ERROR: upgrade failed</text>
+  <text x="129" y="331" font-family="'Courier New',monospace" font-size="7.5" fill="#FF4444">rollback failed too</text>
+  <text x="129" y="344" font-family="'Courier New',monospace" font-size="7.5" fill="#FF9900">↻ retrying... (7/∞)</text>
+  <rect x="108" y="358" width="134" height="9" rx="4" fill="#1a1a2e" stroke="#111" stroke-width="1.5"/>
+
+  <!-- WHY?! speech bubble -->
+  <ellipse cx="248" cy="114" rx="44" ry="25" fill="#FF4400" stroke="#111" stroke-width="2.5"/>
+  <path d="M226,135 L212,156 L250,137" fill="#FF4400" stroke="#111" stroke-width="2"/>
+  <text x="248" y="122" font-family="Impact,'Arial Black',sans-serif" font-size="21" fill="white" text-anchor="middle">WHY?!</text>
+
+  <!-- ============ ERROR TERMINAL (right) ============ -->
+  <rect x="520" y="90" width="258" height="215" rx="8" fill="#0a0c12" stroke="#FF4444" stroke-width="2.5"/>
+  <!-- Title bar -->
+  <rect x="520" y="90" width="258" height="30" rx="8" fill="#CC2222"/>
+  <rect x="520" y="106" width="258" height="14" fill="#CC2222"/>
+  <circle cx="538" cy="105" r="7" fill="#FF7777"/>
+  <circle cx="558" cy="105" r="7" fill="#FFD93D"/>
+  <circle cx="578" cy="105" r="7" fill="#6BCB77"/>
+  <text x="648" y="110" font-family="'Courier New',monospace" font-size="11" fill="rgba(255,255,255,0.85)" text-anchor="middle">rds-upgrade.log</text>
+  <!-- Log lines -->
+  <text x="532" y="148" font-family="'Courier New',monospace" font-size="9.5" fill="#FF5555">✗ connection timeout (3x)</text>
+  <text x="532" y="165" font-family="'Courier New',monospace" font-size="9.5" fill="#FF5555">✗ version incompatible</text>
+  <text x="532" y="182" font-family="'Courier New',monospace" font-size="9.5" fill="#FFD93D">⚠ backup not found</text>
+  <text x="532" y="199" font-family="'Courier New',monospace" font-size="9.5" fill="#FF5555">✗ schema migration fail</text>
+  <text x="532" y="216" font-family="'Courier New',monospace" font-size="9.5" fill="#FF5555">✗ replica out of sync</text>
+  <text x="532" y="233" font-family="'Courier New',monospace" font-size="9.5" fill="#FF9900">↻ retrying... attempt 7</text>
+  <text x="532" y="250" font-family="'Courier New',monospace" font-size="9.5" fill="#FF5555">✗ rollback failed</text>
+  <text x="532" y="267" font-family="'Courier New',monospace" font-size="9.5" fill="#FF5555">☠  abort abort abort</text>
+  <!-- Blinking cursor -->
+  <rect x="532" y="281" width="7" height="11" fill="#FF5555" opacity="0.8"/>
+
+  <!-- Downtime counter -->
+  <rect x="520" y="320" width="258" height="65" rx="8" fill="#140000" stroke="#FF4444" stroke-width="2"/>
+  <text x="649" y="345" font-family="'Courier New',monospace" font-size="11" fill="#FF9900" text-anchor="middle">DOWNTIME</text>
+  <text x="649" y="372" font-family="Impact,'Arial Black',sans-serif" font-size="28" fill="#FF4444" text-anchor="middle">04:23:17</text>
+
+  <!-- Progress bar at bottom -->
+  <rect x="46" y="386" width="460" height="24" rx="5" fill="#120800" stroke="#FF9900" stroke-width="2"/>
+  <rect x="49" y="389" width="38" height="18" rx="3" fill="#FF4400"/>
+  <text x="280" y="402" font-family="'Courier New',monospace" font-size="10" fill="#FF9900" text-anchor="middle">UPGRADE: 2%  ██░░░░░░░░░░░░░░░░░░░░</text>
+</svg>

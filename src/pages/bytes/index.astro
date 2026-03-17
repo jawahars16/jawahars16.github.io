@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const bytes = await getCollection('bytes');
+---
+
+<BaseLayout
+  title="Bytes — jawahar.dev"
+  description="Byte-sized visual explainers on engineering concepts — distributed systems, cloud, security, and more."
+  canonical="https://jawahar.dev/bytes/"
+>
+  <div class="max-w-3xl mx-auto px-6 py-16">
+    <div class="mb-10">
+      <h1 class="text-2xl font-semibold tracking-tight mb-2" style="color: #f8f8f2;">Bytes</h1>
+      <p class="text-sm" style="color: #6272a4;">
+        Bite-sized visual explainers on engineering concepts.
+      </p>
+    </div>
+
+    <!--
+      To add a new byte:
+      1. Create src/content/bytes/your-slug.md with frontmatter: title, image, description
+      2. Add the image to public/assets/bytes/
+      3. It will appear here automatically
+    -->
+
+    <div class="grid gap-10">
+      {bytes.map(async byte => {
+        const { Content } = await byte.render();
+        return (
+          <article class="rounded-xl overflow-hidden" style="border: 1px solid #44475a; background: #21222c;">
+            <img
+              src={byte.data.image}
+              alt={byte.data.title}
+              class="w-full"
+              style="border-bottom: 1px solid #44475a;"
+              loading="lazy"
+            />
+            <div class="p-6">
+              <h2 class="text-base font-semibold mb-3" style="color: #f8f8f2;">{byte.data.title}</h2>
+              <div class="prose prose-sm prose-invert max-w-none">
+                <Content />
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</BaseLayout>

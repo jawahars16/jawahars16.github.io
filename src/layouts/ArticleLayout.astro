@@ -1,0 +1,167 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  slug: string;
+  heroImage?: string;
+}
+
+const { title, description, date, tags, slug, heroImage } = Astro.props;
+
+const canonicalURL = new URL(`/articles/${slug}/`, Astro.site).href;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const isoDate = date.toISOString().split('T')[0];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: isoDate,
+  url: canonicalURL,
+  author: {
+    '@type': 'Person',
+    name: 'Jawahar S',
+    url: 'https://jawahar.dev/about/',
+  },
+  publisher: {
+    '@type': 'Person',
+    name: 'Jawahar S',
+    url: 'https://jawahar.dev/',
+  },
+};
+
+const TAG_GRADIENTS: Record<string, [string, string]> = {
+  'Go':                   ['#38bdf8', '#6366f1'],
+  'OOP':                  ['#818cf8', '#6366f1'],
+  'Rust':                 ['#fb923c', '#ef4444'],
+  'Systems':              ['#94a3b8', '#64748b'],
+  'AWS':                  ['#fbbf24', '#f97316'],
+  'Databases':            ['#fb923c', '#f97316'],
+  'GCP':                  ['#4ade80', '#06b6d4'],
+  'Azure':                ['#38bdf8', '#6366f1'],
+  'Cloud':                ['#67e8f9', '#818cf8'],
+  'Architecture':         ['#a78bfa', '#ec4899'],
+  'Distributed Systems':  ['#c084fc', '#818cf8'],
+  'Resilience':           ['#34d399', '#06b6d4'],
+  'NGINX':                ['#2dd4bf', '#4ade80'],
+  'Networking':           ['#22d3ee', '#38bdf8'],
+  'Web':                  ['#f472b6', '#a78bfa'],
+  'React':                ['#38bdf8', '#06b6d4'],
+  'Flutter':              ['#38bdf8', '#6366f1'],
+  'Security':             ['#f87171', '#fb923c'],
+  'Vault':                ['#fbbf24', '#34d399'],
+  'JavaScript':           ['#fde047', '#fb923c'],
+  'Programming':          ['#c084fc', '#f472b6'],
+};
+
+const TAG_BADGE: Record<string, { bg: string; text: string }> = {
+  'Go':                   { bg: '#e0f2fe', text: '#0369a1' },
+  'OOP':                  { bg: '#e0e7ff', text: '#4338ca' },
+  'Rust':                 { bg: '#ffedd5', text: '#c2410c' },
+  'Systems':              { bg: '#f1f5f9', text: '#475569' },
+  'AWS':                  { bg: '#fef3c7', text: '#b45309' },
+  'Databases':            { bg: '#ffedd5', text: '#c2410c' },
+  'GCP':                  { bg: '#dcfce7', text: '#15803d' },
+  'Azure':                { bg: '#e0f2fe', text: '#0284c7' },
+  'Cloud':                { bg: '#cffafe', text: '#0e7490' },
+  'Architecture':         { bg: '#ede9fe', text: '#7c3aed' },
+  'Distributed Systems':  { bg: '#f3e8ff', text: '#7e22ce' },
+  'Resilience':           { bg: '#d1fae5', text: '#065f46' },
+  'NGINX':                { bg: '#ccfbf1', text: '#0f766e' },
+  'Networking':           { bg: '#cffafe', text: '#0e7490' },
+  'Web':                  { bg: '#fce7f3', text: '#be185d' },
+  'React':                { bg: '#e0f2fe', text: '#0369a1' },
+  'Flutter':              { bg: '#e0f2fe', text: '#0284c7' },
+  'Security':             { bg: '#fee2e2', text: '#b91c1c' },
+  'Vault':                { bg: '#fef3c7', text: '#92400e' },
+  'JavaScript':           { bg: '#fef9c3', text: '#a16207' },
+  'Programming':          { bg: '#f3e8ff', text: '#7e22ce' },
+};
+
+function getGradient(tags: string[]): [string, string] {
+  for (const tag of tags) {
+    if (TAG_GRADIENTS[tag]) return TAG_GRADIENTS[tag];
+  }
+  return ['#818cf8', '#c084fc'];
+}
+
+const [from, to] = getGradient(tags);
+---
+
+<BaseLayout
+  title={`${title} — jawahar.dev`}
+  description={description}
+  canonical={canonicalURL}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <!-- Hero banner: real image or gradient placeholder -->
+  <div class="w-full relative overflow-hidden" style="aspect-ratio: 16/9; max-height: 520px;">
+    {heroImage ? (
+      <>
+        <img src={heroImage} alt={title} class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+      </>
+    ) : (
+      <>
+        <div
+          class="absolute inset-0"
+          style={`background: linear-gradient(135deg, ${from}, ${to})`}
+        />
+        <div class="absolute inset-0 opacity-10" style="background-image: url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\");" />
+      </>
+    )}
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-12">
+    <a
+      href="/articles/"
+      class="inline-flex items-center gap-1.5 text-sm font-mono font-semibold transition-colors mb-8 px-3 py-1.5 rounded-md"
+      style="color: #8be9fd; background: rgba(139,233,253,0.08); border: 1px solid rgba(139,233,253,0.2);"
+      onmouseover="this.style.background='rgba(139,233,253,0.15)'" onmouseout="this.style.background='rgba(139,233,253,0.08)'"
+    >
+      ← Articles
+    </a>
+
+    <article>
+      <header class="mb-10">
+        <div class="flex items-center gap-2 flex-wrap mb-4">
+          <time datetime={isoDate} class="text-sm font-mono font-medium" style="color: #bd93f9;">
+            {formattedDate}
+          </time>
+          {tags.length > 0 && <span style="color: #6272a4;">·</span>}
+          {tags.map(tag => {
+            const style = TAG_BADGE[tag] ?? { bg: '#f4f4f5', text: '#52525b' };
+            return (
+              <span
+                class="text-xs font-mono px-2.5 py-0.5 rounded-full font-medium"
+                style={`background: ${style.bg}; color: ${style.text}`}
+              >
+                {tag}
+              </span>
+            );
+          })}
+        </div>
+        <h1 class="text-3xl font-bold tracking-tight leading-snug" style="color: #f8f8f2;">
+          {title}
+        </h1>
+        <p class="mt-3 text-lg leading-relaxed" style="color: #6272a4;">{description}</p>
+      </header>
+
+      <div class="prose prose-invert max-w-none">
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
