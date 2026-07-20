@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 
 export async function GET() {
-  const site = 'https://jawahar.dev';
+  const site = 'https://jawahar.sh';
 
   const posts = await getCollection('blog');
   const bytes = await getCollection('bytes');
@@ -11,6 +11,7 @@ export async function GET() {
     { url: `${site}/articles/`, lastmod: new Date().toISOString().split('T')[0], priority: '0.9' },
     { url: `${site}/bytes/`, lastmod: new Date().toISOString().split('T')[0], priority: '0.8' },
     { url: `${site}/videos/`, lastmod: new Date().toISOString().split('T')[0], priority: '0.7' },
+    { url: `${site}/support/`, lastmod: new Date().toISOString().split('T')[0], priority: '0.6' },
     { url: `${site}/about/`, lastmod: new Date().toISOString().split('T')[0], priority: '0.6' },
   ];
 

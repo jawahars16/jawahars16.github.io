@@ -22,6 +22,7 @@ const nav = [
   { label: 'Articles', href: '/articles/' },
   { label: 'Bytes', href: '/bytes/' },
   { label: 'Videos', href: '/videos/' },
+  { label: 'Contact', href: '/support/' },
   { label: 'About', href: '/about/' },
 ];
 ---
@@ -41,7 +42,7 @@ const nav = [
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:site_name" content="jawahar.dev" />
+    <meta property="og:site_name" content="jawahar.sh" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
@@ -61,10 +62,7 @@ const nav = [
       html { font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Fira Code', monospace; }
     </style>
 
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>j</text></svg>"
-    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
 
   <body class="min-h-screen flex flex-col" style="background-color: #282a36; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; background-attachment: fixed; color: #f8f8f2;">
@@ -73,9 +71,13 @@ const nav = [
       <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <a
           href="/"
-          class="font-mono text-base font-bold tracking-tight text-white hover:text-white/80 transition-colors" style="letter-spacing: 0.01em; text-shadow: 0 0 18px rgba(255,255,255,0.25);"
+          class="inline-flex items-center gap-2 font-mono text-base font-bold tracking-tight text-white hover:text-white/80 transition-colors" style="letter-spacing: 0.01em; text-shadow: 0 0 18px rgba(255,255,255,0.25);"
         >
-          jawahar.dev
+          <svg aria-hidden="true" class="w-4 h-4 flex-shrink-0" viewBox="0 0 16 16" fill="none">
+            <path d="M4 3.5L9 8L4 12.5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M9.5 12.5H13" stroke="white" stroke-width="2.4" stroke-linecap="round" />
+          </svg>
+          <span>jawahar.sh</span>
         </a>
         <nav aria-label="Main navigation">
           <ul class="flex items-center gap-6">
@@ -107,15 +109,16 @@ const nav = [
       <slot />
     </main>
 
-    <footer class="mt-24" style="border-top: 1px solid #44475a; background: #21222c;">
+    <footer class="mt-12" style="border-top: 1px solid #44475a; background: #21222c;">
       <div class="max-w-5xl mx-auto px-6 py-10">
         <!-- Top row: brand + links -->
         <div class="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
-          <a href="/" class="font-mono font-bold text-base tracking-tight" style="color: #f8f8f2;">jawahar.dev</a>
+          <a href="/" class="font-mono font-bold text-base tracking-tight" style="color: #f8f8f2;">jawahar.sh</a>
           <div class="flex gap-6 text-sm font-mono">
             <a href="/articles/" class="transition-colors" style="color: #6272a4;" onmouseover="this.style.color='#f8f8f2'" onmouseout="this.style.color='#6272a4'">Articles</a>
             <a href="/bytes/" class="transition-colors" style="color: #6272a4;" onmouseover="this.style.color='#f8f8f2'" onmouseout="this.style.color='#6272a4'">Bytes</a>
             <a href="/videos/" class="transition-colors" style="color: #6272a4;" onmouseover="this.style.color='#f8f8f2'" onmouseout="this.style.color='#6272a4'">Videos</a>
+            <a href="/support/" class="transition-colors" style="color: #6272a4;" onmouseover="this.style.color='#f8f8f2'" onmouseout="this.style.color='#6272a4'">Contact</a>
             <a href="/about/" class="transition-colors" style="color: #6272a4;" onmouseover="this.style.color='#f8f8f2'" onmouseout="this.style.color='#6272a4'">About</a>
           </div>
           <div class="flex gap-5 text-sm font-mono">
@@ -133,7 +136,7 @@ const nav = [
         <div style="border-top: 1px solid #2d2f3f;"></div>
         <!-- Bottom row: copyright -->
         <div class="flex items-center justify-center mt-6">
-          <span class="text-xs font-mono" style="color: #44475a;">&copy; {new Date().getFullYear()} jawahar.dev — All rights reserved</span>
+          <span class="text-xs font-mono" style="color: #44475a;">&copy; {new Date().getFullYear()} jawahar.sh — All rights reserved</span>
         </div>
       </div>
     </footer>
