@@ -1,0 +1,119 @@
+---
+interface Props {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  href: string;
+  logo: string;
+  accent: string;
+  availability: 'github' | 'app-store' | 'coming-soon';
+  availabilityLabel: string;
+  availabilityHref?: string;
+  productHuntHref?: string;
+}
+
+const { id, name, tagline, description, href, logo, accent, availability, availabilityLabel, availabilityHref, productHuntHref } = Astro.props;
+const isPlaceholder = !href;
+
+const availabilityIcon =
+  availability === 'github'
+    ? 'M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z'
+    : availability === 'app-store'
+      ? 'M17.05 12.27c-.02-2.16 1.76-3.2 1.84-3.25-1.01-1.48-2.58-1.68-3.13-1.7-1.32-.14-2.6.79-3.27.79-.68 0-1.71-.77-2.82-.75-1.43.02-2.77.85-3.5 2.14-1.51 2.62-.38 6.47 1.06 8.59.72 1.03 1.56 2.19 2.66 2.15 1.08-.04 1.48-.69 2.78-.69 1.29 0 1.67.69 2.8.67 1.16-.02 1.89-1.04 2.58-2.08.83-1.18 1.16-2.35 1.17-2.41-.03-.01-2.15-.82-2.17-3.46zM14.9 5.92c.58-.73.98-1.72.86-2.72-.84.04-1.9.58-2.5 1.29-.53.62-1.01 1.65-.88 2.61.95.07 1.92-.48 2.52-1.18z'
+      : '';
+---
+
+<div
+  class:list={[
+    'group relative block w-full max-w-md sm:max-w-none rounded-xl overflow-hidden shadow-lg transition-all duration-200',
+    isPlaceholder ? 'opacity-80' : '',
+  ]}
+  style="background: #21222c; border: 1px solid #44475a;"
+>
+  <div class="p-5">
+    <div class="grid grid-cols-[minmax(0,1fr)_4rem] items-start gap-4">
+      <div class="min-w-0">
+        <h3 class="text-lg font-semibold leading-snug" style="color: #f8f8f2;">
+          {name}
+        </h3>
+        <p class="mt-1 text-sm font-semibold leading-relaxed" style={`color: ${accent};`}>
+          {tagline}
+        </p>
+        {description ? (
+          <p class="mt-2 min-h-20 text-sm leading-relaxed" style="color: #6272a4;">
+            {description}
+          </p>
+        ) : (
+          <div class="mt-2 min-h-20" />
+        )}
+      </div>
+      <div
+        class="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl"
+      >
+        {logo ? (
+          <img src={logo} alt={`${name} logo`} class="h-full w-full object-contain" loading="lazy" />
+        ) : null}
+      </div>
+    </div>
+
+    <div class="mt-4 flex min-h-8 items-center justify-between border-t pt-2" style="border-color: #2d2f3f;">
+      <div class="flex items-center gap-1">
+        {availabilityIcon && availabilityHref && (
+          <a
+            href={availabilityHref}
+            target="_blank"
+            rel="noopener"
+            class="flex h-8 w-8 items-center justify-center transition-transform hover:scale-110"
+            title={availabilityLabel}
+            aria-label={availabilityLabel}
+            style={`color: ${accent};`}
+          >
+            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d={availabilityIcon} />
+            </svg>
+          </a>
+        )}
+        {availabilityIcon && !availabilityHref && (
+          <span class="flex h-8 w-8 items-center justify-center" title={availabilityLabel} aria-label={availabilityLabel} style={`color: ${accent};`}>
+            <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d={availabilityIcon} />
+            </svg>
+          </span>
+        )}
+        {productHuntHref && (
+          <a
+            href={productHuntHref}
+            target="_blank"
+            rel="noopener"
+            class="flex h-8 w-8 items-center justify-center transition-transform hover:scale-110"
+            title="View on Product Hunt"
+            aria-label="View on Product Hunt"
+            style="color: #ff6154;"
+          >
+            <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="#ff6154" />
+              <path d="M9 17V7h4.2c2.2 0 3.8 1.5 3.8 3.6s-1.6 3.6-3.8 3.6h-1.7V17H9Zm2.5-5.1H13c.9 0 1.5-.5 1.5-1.3S13.9 9.3 13 9.3h-1.5v2.6Z" fill="white" />
+            </svg>
+          </a>
+        )}
+      </div>
+      {!isPlaceholder && (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener"
+          class="flex h-8 w-8 items-center justify-center transition-transform hover:scale-110"
+          title={`Open ${name}`}
+          aria-label={`Open ${name}`}
+          style={`color: ${accent};`}
+        >
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      )}
+    </div>
+
+  </div>
+</div>

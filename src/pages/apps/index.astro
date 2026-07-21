@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AppCard from '../../components/AppCard.astro';
+import { apps } from '../../lib/apps';
+---
+
+<BaseLayout
+  title="Apps — jawahar.sh"
+  description="Apps by Jawahar S."
+  canonical="https://jawahar.sh/apps/"
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div class="text-center sm:text-left">
+      <h1 class="text-2xl font-bold tracking-tight mb-2" style="color: #f8f8f2;">Apps</h1>
+      <p class="text-sm font-mono mb-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md" style="color: #bd93f9; background: rgba(189,147,249,0.1); border: 1px solid rgba(189,147,249,0.2);">{apps.length} apps</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 justify-items-center sm:justify-items-stretch">
+      {apps.map(app => (
+        <AppCard {...app} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

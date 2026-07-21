@@ -12,9 +12,11 @@ const posts = (await getCollection('blog'))
   description="Technical articles on distributed systems, cloud infrastructure, Go, and software engineering by Jawahar S."
   canonical="https://jawahar.sh/articles/"
 >
-  <div class="max-w-5xl mx-auto px-6 py-16">
-    <h1 class="text-2xl font-bold tracking-tight mb-2" style="color: #f8f8f2;">Articles</h1>
-    <p class="text-sm font-mono mb-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md" style="color: #bd93f9; background: rgba(189,147,249,0.1); border: 1px solid rgba(189,147,249,0.2);">{posts.length} posts</p>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div class="text-center sm:text-left">
+      <h1 class="text-2xl font-bold tracking-tight mb-2" style="color: #f8f8f2;">Articles</h1>
+      <p class="text-sm font-mono mb-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md" style="color: #bd93f9; background: rgba(189,147,249,0.1); border: 1px solid rgba(189,147,249,0.2);">{posts.length} posts</p>
+    </div>
 
     <!--
       To add a new article:
@@ -22,7 +24,7 @@ const posts = (await getCollection('blog'))
       2. The URL will automatically be /articles/your-slug/
     -->
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 justify-items-center sm:justify-items-stretch">
       {posts.map(post => (
         <ArticleCard
           title={post.data.title}

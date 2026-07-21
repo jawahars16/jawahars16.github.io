@@ -2,22 +2,28 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const bioLines = [
-  { n: 1,  t: "Hi, I'm Jawahar — a software engineer focused on" },
-  { n: 2,  t: "backend systems and distributed computing." },
+  { n: 1,  t: "Hi, I'm Jawahar — I have spent 15+ years building" },
+  { n: 2,  t: "reliable enterprise software." },
   { n: 3,  t: "" },
-  { n: 4,  t: "I spend most of my time thinking about how systems" },
-  { n: 5,  t: "fail, how to make them not fail, and how to explain" },
-  { n: 6,  t: "those ideas clearly." },
-  { n: 7,  t: "" },
-  { n: 8,  t: "This site is where I publish long-form articles," },
-  { n: 9,  t: "short visual explainers (Bytes), and videos. Topics" },
-  { n: 10, t: "include distributed systems, cloud platforms, system" },
-  { n: 11, t: "design, and the engineering practices that make" },
-  { n: 12, t: "codebases maintainable." },
+  { n: 4,  t: "Now I craft thoughtful, high-quality apps as an" },
+  { n: 5,  t: "indie developer." },
+  { n: 6,  t: "" },
+  { n: 7,  t: "This site is where I publish long-form articles," },
+  { n: 8,  t: "short visual explainers (Bytes), and videos. Topics" },
+  { n: 9, t: "include distributed systems, cloud platforms, system" },
+  { n: 10, t: "design, and the engineering practices that make" },
+  { n: 11, t: "codebases maintainable." },
+];
+
+const bioParagraphs = [
+  "Hi, I'm Jawahar — I have spent 15+ years building reliable enterprise software.",
+  "Now I craft thoughtful, high-quality apps as an indie developer.",
+  "This site is where I publish long-form articles, short visual explainers (Bytes), and videos. Topics include distributed systems, cloud platforms, system design, and the engineering practices that make codebases maintainable.",
 ];
 
 const skills = [
-  "Go", "TypeScript", "Rust", "Python",
+  "Go", "TypeScript", "Rust", "Python", "Java", "Swift",
+  "Spring Boot", "Jenkins", "Snowflake", "Kleene",
   "GCP", "AWS", "Azure",
   "Distributed Systems", "System Design", "Observability",
 ];
@@ -26,18 +32,22 @@ const certifications = [
   {
     label: "HashiCorp Certified: Vault Associate",
     href: "/assets/certs/Vault.pdf",
+    icon: "/assets/certs/Hashicorp%20iOS%2027%20Filled.png",
   },
   {
     label: "Google Cloud Certified: Professional Cloud Architect",
     href: "/assets/certs/GCP%20PCA.pdf",
+    icon: "/assets/certs/Google%20Cloud%20Windows%2011%20Color.png",
   },
   {
     label: "Microsoft Certified: Azure Solutions Architect Expert",
     href: "/assets/certs/Azure%20PCA.pdf",
+    icon: "/assets/certs/Azure%20Windows%2011%20Color.png",
   },
   {
     label: "Xamarin Certified Developer",
     href: "/assets/certs/Xamarin.pdf",
+    icon: "/assets/certs/Xamarin%20Windows%2011%20Color.png",
   },
 ];
 
@@ -68,7 +78,7 @@ const links = [
 
 <BaseLayout
   title="About — jawahar.sh"
-  description="Jawahar S is a software engineer focused on distributed systems, backend infrastructure, and cloud engineering."
+  description="Jawahar S has 15+ years building reliable enterprise software and now crafts thoughtful, high-quality apps as an indie developer."
   canonical="https://jawahar.sh/about/"
 >
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
@@ -106,22 +116,28 @@ const links = [
       </div>
 
       <!-- Editor: plain text bio with line numbers -->
-      <div class="overflow-x-auto py-5" style="background: #1e1f2e;">
-        <table class="w-full border-collapse" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.85;">
+      <div class="py-5" style="background: #1e1f2e;">
+        <div class="sm:hidden px-4 text-left font-mono text-sm leading-7" style="color: #cdd6f4;">
+          {bioParagraphs.map(paragraph => (
+            <p class="mb-5 last:mb-0">{paragraph}</p>
+          ))}
+          <span class="inline-block h-4 align-middle" style="width: 1px; background: #cdd6f4; animation: blink 1.1s step-end infinite;"></span>
+        </div>
+        <table class="hidden sm:table w-full border-collapse text-left" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.85;">
           {bioLines.map(line => (
             <tr class="group hover:bg-white/[0.03] transition-colors">
-              <td class="select-none text-right pr-5 pl-4 align-top group-hover:text-zinc-500 transition-colors" style="color: #44475a; min-width: 3.5rem; user-select: none; width: 3.5rem;">
+              <td class="select-none text-right pr-4 pl-4 align-top group-hover:text-zinc-500 transition-colors" style="color: #44475a; min-width: 2.75rem; user-select: none; width: 2.75rem;">
                 {line.n}
               </td>
-              <td class="pr-8 align-top" style="color: #cdd6f4; white-space: pre-wrap;">
+              <td class="px-4 sm:pl-0 sm:pr-8 align-top text-left" style="color: #cdd6f4; white-space: pre-wrap;">
                 {line.t || <span>&nbsp;</span>}
               </td>
             </tr>
           ))}
           <!-- Blinking cursor -->
           <tr>
-            <td class="select-none text-right pr-5 pl-4" style="color: #44475a;">13</td>
-            <td><span class="inline-block h-4 ml-1 align-middle" style="width: 1px; background: #cdd6f4; animation: blink 1.1s step-end infinite;"></span></td>
+            <td class="select-none text-right pr-4 pl-4" style="color: #44475a;">12</td>
+            <td class="px-4 sm:pl-0"><span class="inline-block h-4 align-middle" style="width: 1px; background: #cdd6f4; animation: blink 1.1s step-end infinite;"></span></td>
           </tr>
         </table>
       </div>
@@ -167,7 +183,7 @@ const links = [
             onmouseout="this.style.borderColor='#44475a'"
           >
             <span class="w-8 h-8 flex items-center justify-center flex-shrink-0">
-              <img src="/assets/certs/reward.png" alt="" class="w-6 h-6 object-contain" loading="lazy" />
+              <img src={cert.icon} alt="" class="w-6 h-6 object-contain" loading="lazy" />
             </span>
             <span class="text-sm font-mono leading-snug" style="color: #f8f8f2;">{cert.label}</span>
             <svg class="w-3.5 h-3.5 ml-auto flex-shrink-0" style="color: #44475a;" fill="none" viewBox="0 0 24 24" stroke="currentColor">

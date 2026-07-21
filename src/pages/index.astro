@@ -1,52 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import AppCard from '../components/AppCard.astro';
 import { getCollection } from 'astro:content';
+import { CHANNEL_URL, getYouTubeVideos } from '../lib/youtube';
+import { apps } from '../lib/apps';
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 
-// --- YouTube: fetch 3 most recent long-form videos ---
-const CHANNEL_ID = 'UCmMu15DUGT3klr0M6RBQqbg';
-const CHANNEL_URL = 'https://www.youtube.com/channel/UCmMu15DUGT3klr0M6RBQqbg/videos';
-
-function decodeEntities(str: string): string {
-  return str
-    .replace(/&amp;/g, '&').replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
-}
-
-interface Video { id: string; title: string; description: string; published: string; formattedDate: string; thumbnail: string; url: string; }
-
-let recentVideos: Video[] = [];
-try {
-  const rss = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`);
-  const xml = await rss.text();
-  const entries = xml.match(/<entry>([\s\S]*?)<\/entry>/g) ?? [];
-
-  const parsed: Video[] = entries.map(entry => {
-    const id    = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/)?.[1] ?? '';
-    const title = decodeEntities(entry.match(/<title>([\s\S]*?)<\/title>/)?.[1]?.trim() ?? '');
-    const pub   = entry.match(/<published>(.*?)<\/published>/)?.[1] ?? '';
-    const desc  = decodeEntities((entry.match(/<media:description>([\s\S]*?)<\/media:description>/)?.[1] ?? '').trim()).slice(0, 120);
-    const date  = new Date(pub);
-    return {
-      id, title, description: desc,
-      published: pub.slice(0, 10),
-      formattedDate: isNaN(date.getTime()) ? pub.slice(0, 10) : date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
-      thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
-      url: `https://www.youtube.com/watch?v=${id}`,
-    };
-  }).filter(v => v.id);
-
-  const checkIsShort = async (id: string) => {
-    try { const r = await fetch(`https://www.youtube.com/shorts/${id}`, { redirect: 'follow' }); return r.url.includes('/shorts/'); }
-    catch { return false; }
-  };
-  const shortFlags = await Promise.all(parsed.map(v => checkIsShort(v.id)));
-  recentVideos = parsed.filter((_, i) => !shortFlags[i]).slice(0, 3);
-} catch { /* silently skip if RSS unavailable */ }
+const featuredApps = apps.filter(app => app.href);
+const recentVideos = await getYouTubeVideos(3);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -60,18 +25,18 @@ const jsonLd = {
 
 <BaseLayout
   title="Jawahar S — Software Engineer"
-  description="Software engineer writing about distributed systems, cloud infrastructure, Go, and the engineering ideas that make systems more reliable."
+  description="15+ years building reliable enterprise software, now crafting thoughtful, high-quality apps as an indie developer."
   jsonLd={jsonLd}
 >
-  <div class="max-w-5xl mx-auto px-6">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
     <!-- Hero -->
-    <section class="pt-8 pb-7" style="border-bottom: 1px solid #2d2f3f;">
+    <section class="pt-8 pb-7 sm:pt-10" style="border-bottom: 1px solid #2d2f3f;">
       <div class="flex flex-col lg:flex-row items-center gap-10">
 
         <!-- Left: name, role, tagline, socials -->
         <div class="flex flex-col items-center lg:items-start text-center lg:text-left flex-1 gap-5">
-          <div class="flex flex-col sm:flex-row items-center gap-4">
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
             <img
               src="/profile.jpeg"
               alt="Jawahar Selvaraj"
@@ -84,10 +49,10 @@ const jsonLd = {
             </div>
           </div>
           <p class="text-sm leading-relaxed max-w-xs" style="color: #6272a4;">
-            Writing about distributed systems, cloud infrastructure, Go, and the engineering ideas that make software reliable.
+            15+ years building reliable enterprise software, now crafting thoughtful, high-quality apps as an indie developer.
           </p>
           <!-- Social links -->
-          <div class="flex items-center gap-4 text-sm font-mono">
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 text-sm font-mono">
             <a href="https://github.com/jawahars16" target="_blank" rel="noopener"
               class="flex items-center gap-1.5 transition-colors hover:text-zinc-100" style="color: #6272a4;">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -107,7 +72,7 @@ const jsonLd = {
         </div>
 
         <!-- Right: terminal card -->
-        <div class="w-full lg:w-auto lg:flex-1 max-w-xl">
+        <div class="w-full max-w-md mx-auto lg:max-w-xl lg:flex-1">
           <div class="rounded-xl overflow-hidden shadow-xl" style="background: #1e1f2e; border: 1px solid rgba(255,255,255,0.22);">
             <div class="flex items-center px-4 py-2.5" style="background: #21222c; border-bottom: 1px solid #44475a;">
               <div class="flex items-center gap-1.5">
@@ -117,7 +82,7 @@ const jsonLd = {
                 <span class="ml-2 text-xs font-mono" style="color: #6272a4;">about.ts</span>
               </div>
             </div>
-            <div class="px-5 py-5 font-mono text-sm leading-6">
+            <div class="overflow-x-auto px-4 py-5 font-mono text-xs leading-6 sm:px-5 sm:text-sm">
               <div>
                 <span style="color: #ff7b72;">const</span>
                 <span style="color: #f8f8f2;"> about</span>
@@ -133,14 +98,16 @@ const jsonLd = {
                 <span style="color: #ffb86c;">"Software Engineer"</span><span style="color: #6272a4;">,</span>
               </div>
               <div class="pl-5">
-                <span style="color: #79c0ff;">focus</span><span style="color: #f8f8f2;">: [</span>
-                <span style="color: #50fa7b;">"Distributed Systems"</span><span style="color: #6272a4;">, </span>
-                <span style="color: #50fa7b;">"Cloud"</span><span style="color: #6272a4;">, </span>
-                <span style="color: #50fa7b;">"Go"</span><span style="color: #f8f8f2;">]</span><span style="color: #6272a4;">,</span>
+                <span style="color: #79c0ff;">experience</span><span style="color: #f8f8f2;">: </span>
+                <span style="color: #50fa7b;">"15+ years"</span><span style="color: #6272a4;">,</span>
               </div>
               <div class="pl-5">
-                <span style="color: #79c0ff;">writing</span><span style="color: #f8f8f2;">: </span>
-                <span style="color: #ffb86c;">"about ideas that make systems reliable"</span><span style="color: #6272a4;">,</span>
+                <span style="color: #79c0ff;">now</span><span style="color: #f8f8f2;">: </span>
+                <span style="color: #ffb86c;">"indie developer"</span><span style="color: #6272a4;">,</span>
+              </div>
+              <div class="pl-5">
+                <span style="color: #79c0ff;">craft</span><span style="color: #f8f8f2;">: </span>
+                <span style="color: #ffb86c;">"thoughtful, high-quality apps"</span><span style="color: #6272a4;">,</span>
               </div>
               <div><span style="color: #f8f8f2;">&#125;</span></div>
             </div>
@@ -150,34 +117,28 @@ const jsonLd = {
       </div>
     </section>
 
-    <!-- Recent Articles -->
-    <section class="pt-5 pb-6" style="border-bottom: 1px solid #2d2f3f;">
-      <div class="flex items-baseline justify-between mb-6">
+    <!-- Apps -->
+    <section class="pt-7 pb-6" style="border-bottom: 1px solid #2d2f3f;">
+      <div class="flex flex-col sm:flex-row items-center sm:items-baseline justify-center sm:justify-between gap-3 mb-6 text-center sm:text-left">
         <h2 class="text-lg font-bold uppercase tracking-widest" style="color: #f8f8f2; letter-spacing: 0.12em;">
-          Recent Articles
+          Apps
         </h2>
-        <a href="/articles/" class="text-sm font-mono transition-colors" style="color: #bd93f9;"
+        <a href="/apps/" class="text-sm font-mono transition-colors" style="color: #bd93f9;"
           onmouseover="this.style.color='#f8f8f2'" onmouseout="this.style.color='#bd93f9'">
-          All articles →
+          All apps →
         </a>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        {posts.map(post => (
-          <ArticleCard
-            title={post.data.title}
-            description={post.data.description}
-            date={post.data.date}
-            tags={post.data.tags}
-            slug={post.slug}
-            heroImage={post.data.heroImage}
-          />
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 justify-items-center sm:justify-items-stretch">
+        {featuredApps.map(app => (
+          <AppCard {...app} />
         ))}
       </div>
     </section>
 
     <!-- Recent Videos -->
-    <section class="pt-5 pb-9">
-      <div class="flex items-baseline justify-between mb-6">
+    <section class="pt-7 pb-6" style="border-bottom: 1px solid #2d2f3f;">
+      <div class="flex flex-col sm:flex-row items-center sm:items-baseline justify-center sm:justify-between gap-3 mb-6 text-center sm:text-left">
         <h2 class="text-lg font-bold uppercase tracking-widest" style="color: #f8f8f2; letter-spacing: 0.12em;">
           Recent Videos
         </h2>
@@ -188,13 +149,13 @@ const jsonLd = {
       </div>
 
       {recentVideos.length > 0 ? (
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 justify-items-center sm:justify-items-stretch">
           {recentVideos.map(video => (
             <a
               href={video.url}
               target="_blank"
               rel="noopener"
-              class="group block rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-200 shadow-lg"
+              class="group block w-full max-w-md sm:max-w-none rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-200 shadow-lg"
               style="background: #21222c; border: 1px solid #44475a;"
             >
               <div class="relative overflow-hidden" style="aspect-ratio: 16/9;">
@@ -230,6 +191,31 @@ const jsonLd = {
       ) : (
         <p class="text-sm font-mono" style="color: #44475a;">Videos unavailable at build time.</p>
       )}
+    </section>
+
+    <!-- Recent Articles -->
+    <section class="pt-7 pb-9">
+      <div class="flex flex-col sm:flex-row items-center sm:items-baseline justify-center sm:justify-between gap-3 mb-6 text-center sm:text-left">
+        <h2 class="text-lg font-bold uppercase tracking-widest" style="color: #f8f8f2; letter-spacing: 0.12em;">
+          Recent Articles
+        </h2>
+        <a href="/articles/" class="text-sm font-mono transition-colors" style="color: #bd93f9;"
+          onmouseover="this.style.color='#f8f8f2'" onmouseout="this.style.color='#bd93f9'">
+          All articles →
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 justify-items-center sm:justify-items-stretch">
+        {posts.map(post => (
+          <ArticleCard
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date}
+            tags={post.data.tags}
+            slug={post.slug}
+            heroImage={post.data.heroImage}
+          />
+        ))}
+      </div>
     </section>
 
   </div>

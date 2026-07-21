@@ -57,7 +57,7 @@ const [from, to] = getGradient(tags);
 const primaryTag = tags[0] ?? '';
 ---
 
-<a href={`/articles/${slug}/`} class="group block rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-200 shadow-lg" style="background: #21222c; border: 1px solid #44475a;">
+<a href={`/articles/${slug}/`} class="group block w-full max-w-md sm:max-w-none rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-200 shadow-lg" style="background: #21222c; border: 1px solid #44475a;">
   <!-- Hero: real image or gradient placeholder -->
   <div class="h-36 w-full relative overflow-hidden">
     {heroImage ? (
