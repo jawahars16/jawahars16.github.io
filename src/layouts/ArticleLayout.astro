@@ -100,52 +100,48 @@ const [from, to] = getGradient(tags);
 ---
 
 <BaseLayout
-  title={`${title} — jawahar.sh`}
+  title={`${title} - jawahar.sh`}
   description={description}
   canonical={canonicalURL}
   ogType="article"
   jsonLd={jsonLd}
 >
-  <!-- Hero banner: real image or gradient placeholder -->
-  <div class="w-full relative overflow-hidden" style="aspect-ratio: 16/9; max-height: 520px;">
-    {heroImage ? (
-      <>
+  <!-- Hero banner: real image or compact signal rail -->
+  {heroImage ? (
+    <div class="w-full relative overflow-hidden" style="aspect-ratio: 16/9; max-height: 520px;">
         <img src={heroImage} alt={title} class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-      </>
-    ) : (
-      <>
+    </div>
+  ) : (
+    <div class="article-signal-rail">
         <div
           class="absolute inset-0"
           style={`background: linear-gradient(135deg, ${from}, ${to})`}
         />
-        <div class="absolute inset-0 opacity-10" style="background-image: url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\");" />
-      </>
-    )}
-  </div>
+        <div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(rgba(255,255,255,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.22) 1px, transparent 1px); background-size: 24px 24px;" />
+    </div>
+  )}
 
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+  <div class="article-shell mx-auto px-5 sm:px-6 py-10 sm:py-14">
     <a
       href="/articles/"
-      class="inline-flex items-center gap-1.5 text-sm font-mono font-semibold transition-colors mb-8 px-3 py-1.5 rounded-md"
-      style="color: #8be9fd; background: rgba(139,233,253,0.08); border: 1px solid rgba(139,233,253,0.2);"
-      onmouseover="this.style.background='rgba(139,233,253,0.15)'" onmouseout="this.style.background='rgba(139,233,253,0.08)'"
+      class="article-back-link inline-flex items-center gap-1.5 font-mono font-semibold transition-colors mb-10 px-3 py-1.5"
     >
       ← Articles
     </a>
 
     <article>
-      <header class="mb-10">
-        <div class="flex items-center gap-2 flex-wrap mb-4">
-          <time datetime={isoDate} class="text-sm font-mono font-medium" style="color: #bd93f9;">
+      <header class="article-header mb-12">
+        <div class="flex items-center gap-2 flex-wrap mb-5">
+          <time datetime={isoDate} class="article-date font-mono font-medium">
             {formattedDate}
           </time>
-          {tags.length > 0 && <span style="color: #6272a4;">·</span>}
+          {tags.length > 0 && <span class="article-meta-dot">·</span>}
           {tags.map(tag => {
             const style = TAG_BADGE[tag] ?? { bg: '#f4f4f5', text: '#52525b' };
             return (
               <span
-                class="text-xs font-mono px-2.5 py-0.5 rounded-full font-medium"
+                class="article-tag font-mono px-2.5 py-0.5 font-medium"
                 style={`background: ${style.bg}; color: ${style.text}`}
               >
                 {tag}
@@ -153,15 +149,239 @@ const [from, to] = getGradient(tags);
             );
           })}
         </div>
-        <h1 class="text-3xl font-bold tracking-tight leading-snug" style="color: #f8f8f2;">
+        <h1 class="article-title font-bold">
           {title}
         </h1>
-        <p class="mt-3 text-lg leading-relaxed" style="color: #6272a4;">{description}</p>
+        <p class="article-description mt-5">{description}</p>
       </header>
 
-      <div class="prose prose-invert max-w-none">
+      <div class="prose prose-invert article-body">
         <slot />
       </div>
     </article>
   </div>
 </BaseLayout>
+
+<style>
+  :global(body) {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px) !important;
+  }
+
+  .article-signal-rail {
+    height: 72px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid #44475a;
+  }
+
+  .article-shell {
+    max-width: 1024px;
+  }
+
+  .article-back-link {
+    border: 1px solid #44475a;
+    color: #8be9fd;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    border-radius: 4px;
+    background: #21222c;
+  }
+
+  .article-back-link:hover {
+    background: #282a36;
+    border-color: #8be9fd;
+  }
+
+  .article-header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #44475a;
+  }
+
+  .article-date {
+    color: #bd93f9;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .article-meta-dot {
+    color: #6272a4;
+  }
+
+  .article-tag {
+    border-radius: 4px;
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
+  .article-title {
+    color: #f8f8f2;
+    font-size: clamp(1.9rem, 3.2vw, 2.25rem);
+    line-height: 1.12;
+    letter-spacing: 0;
+    max-width: none;
+    white-space: nowrap;
+  }
+
+  .article-description {
+    color: #cdd6f4;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    line-height: 1.75;
+    max-width: 92ch;
+  }
+
+  :global(.article-body) {
+    max-width: none;
+    color: #e6edf3;
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    letter-spacing: 0;
+  }
+
+  :global(.article-body > p),
+  :global(.article-body > ul),
+  :global(.article-body > ol),
+  :global(.article-body > blockquote),
+  :global(.article-body > h2),
+  :global(.article-body > h3),
+  :global(.article-body > h4),
+  :global(.article-body > h5),
+  :global(.article-body > h6) {
+    max-width: 92ch;
+  }
+
+  :global(.article-body p),
+  :global(.article-body li) {
+    color: #e6edf3;
+  }
+
+  :global(.article-body p) {
+    margin-top: 1.35em;
+    margin-bottom: 1.35em;
+  }
+
+  :global(.article-body > p:has(img)) {
+    max-width: none;
+    margin-top: 2rem;
+    margin-bottom: 2.25rem;
+  }
+
+  :global(.article-body > p:first-child) {
+    color: #f8f8f2;
+    font-style: normal;
+    padding-left: 1rem;
+    border-left: 3px solid #8be9fd;
+  }
+
+  :global(.article-body > p:first-child em) {
+    font-style: normal;
+  }
+
+  :global(.article-body h2) {
+    color: #f8f8f2;
+    font-size: clamp(1.45rem, 3vw, 1.85rem);
+    line-height: 1.25;
+    letter-spacing: 0;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #44475a;
+  }
+
+  :global(.article-body h3) {
+    color: #f8f8f2;
+    font-size: 1.25rem;
+    line-height: 1.35;
+    letter-spacing: 0;
+    margin-top: 2.25rem;
+  }
+
+  :global(.article-body strong) {
+    color: #f8f8f2;
+    font-weight: 600;
+  }
+
+  :global(.article-body a) {
+    color: #8be9fd;
+    text-decoration-color: rgba(139, 233, 253, 0.35);
+    text-underline-offset: 0.18em;
+  }
+
+  :global(.article-body a:hover) {
+    text-decoration-color: #8be9fd;
+  }
+
+  :global(.article-body code) {
+    color: #8be9fd;
+    background: #191a22;
+    border: 1px solid #44475a;
+    border-radius: 4px;
+    padding: 0.12em 0.38em;
+    font-size: 0.88em;
+  }
+
+  :global(.article-body pre) {
+    background: #191a22;
+    border: 1px solid #44475a;
+    border-radius: 4px;
+    padding: 1.1rem;
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  :global(.article-body img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  :global(.article-body pre code) {
+    color: #f8f8f2;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+
+  :global(.article-body blockquote) {
+    color: #cdd6f4;
+    border-left-color: #8be9fd;
+    background: rgba(139, 233, 253, 0.06);
+    padding: 0.65rem 1rem;
+    border-radius: 4px;
+  }
+
+  :global(.article-body ul),
+  :global(.article-body ol) {
+    padding-left: 1.35rem;
+  }
+
+  :global(.article-body li) {
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+    padding-left: 0.15rem;
+  }
+
+  :global(.article-body li::marker) {
+    color: #8be9fd;
+  }
+
+  @media (max-width: 640px) {
+    .article-signal-rail {
+      height: 52px;
+    }
+
+    .article-title {
+      max-width: none;
+      white-space: normal;
+    }
+
+    :global(.article-body) {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+  }
+</style>

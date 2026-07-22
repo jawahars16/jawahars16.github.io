@@ -19,11 +19,11 @@ Latency is the speed at which data travels from point A to point B, bandwidth re
 
 **4.Network is secure**
 
-The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room with armed guards — and even then I have my doubts. - Gene Spafford
+The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room with armed guards, and even then I have my doubts. - Gene Spafford
 
 **5.Topology doesn't change**
 
-In a distributed system, network topology changes all the time. Sometimes, it’s for accidental reasons or due to issues, such as a server crashing. Other times it’s deliberate — we add, upgrade, or remove servers.
+In a distributed system, network topology changes all the time. Sometimes, it’s for accidental reasons or due to issues, such as a server crashing. Other times it’s deliberate: we add, upgrade, or remove servers.
 
 **6.There is one administrator**
 
