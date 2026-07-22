@@ -6,7 +6,7 @@ dist/
 .astro/
 
 # Assets saved outside public/ (hero images working directory)
-assets/
+/assets/
 
 # Env & secrets
 .env
